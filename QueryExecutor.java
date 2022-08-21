@@ -40,8 +40,8 @@ public class QueryExecutor {
             case LIST: {
                 return db.listPessoas();
             }
-            case HAS: {
-                return Result.err("HAS unsupported for PESSOA");
+            case EXISTS: {
+                return Result.err("EXISTS unsupported for PESSOA");
             }
         }
         throw new RuntimeException("unreachable");

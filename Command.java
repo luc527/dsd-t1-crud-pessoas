@@ -6,7 +6,7 @@ public enum Command {
     DELETE,
     GET,
     LIST,
-    HAS;
+    EXISTS;
 
     public static Optional<Command> from(String cmd) {
         switch (cmd) {
@@ -15,7 +15,7 @@ public enum Command {
             case "DELETE": return Optional.of(DELETE);
             case "GET": return Optional.of(GET);
             case "LIST": return Optional.of(LIST);
-            case "HAS": return Optional.of(HAS);
+            case "EXISTS": return Optional.of(EXISTS);
             default: return Optional.empty();
         }
     }
