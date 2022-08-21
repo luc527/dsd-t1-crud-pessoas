@@ -1,3 +1,5 @@
+package query;
+
 public class ParseException extends Exception {
 
     private final String query;

@@ -1,3 +1,5 @@
+package query;
+
 public class Query {
 
     private final Command cmd;

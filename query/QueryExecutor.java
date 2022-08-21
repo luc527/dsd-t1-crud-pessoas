@@ -1,6 +1,10 @@
+package query;
+
+import db.Database;
+import db.Result;
+import model.Pessoa;
+
 public class QueryExecutor {
-
-
 
     private final Database db;
 

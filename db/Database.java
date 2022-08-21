@@ -1,3 +1,7 @@
+package db;
+
+import model.Pessoa;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

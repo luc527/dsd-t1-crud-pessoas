@@ -1,3 +1,5 @@
+package query;
+
 import java.util.Optional;
 
 public enum Command {

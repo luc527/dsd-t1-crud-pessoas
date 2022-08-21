@@ -1,3 +1,8 @@
+import db.Database;
+import query.ParseException;
+import query.QueryExecutor;
+import query.QueryParser;
+
 import java.util.Scanner;
 
 public class Test {

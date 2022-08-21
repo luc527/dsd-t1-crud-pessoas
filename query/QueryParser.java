@@ -1,4 +1,4 @@
-import java.util.Locale;
+package query;
 
 public class QueryParser {
 
