@@ -34,7 +34,7 @@ public class QueryExecutor {
             }
         } catch (FieldOutOfBoundsException e) {
             return Result.err("Too few arguments");
-        } catch (UnsupportedClassVersionError e) {
+        } catch (UnsupportedOperationException e) {
             return Result.err(e.getMessage());
         }
         throw new RuntimeException("unreachable");
