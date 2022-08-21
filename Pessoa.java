@@ -6,6 +6,10 @@ public class Pessoa implements Comparable<Pessoa> {
     private String nome;
     private String endereco;
 
+    public Pessoa(String cpf) {
+        this.cpf = cpf;
+    }
+
     public Pessoa(String cpf, String nome, String endereco) {
         this.cpf = cpf;
         this.nome = nome;
@@ -45,5 +49,9 @@ public class Pessoa implements Comparable<Pessoa> {
     @Override
     public String toString() {
         return String.format("%s;%s;%s", cpf, nome, endereco);
+    }
+
+    public static Pessoa copy(Pessoa p) {
+        return new Pessoa(p.cpf, p.nome, p.endereco);
     }
 }

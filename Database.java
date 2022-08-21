@@ -9,10 +9,11 @@ public class Database {
         pessoas = new ConcurrentHashMap<>();
     }
 
-    public synchronized Result insertPessoa(Pessoa pessoa) {
-        if (pessoas.containsKey(pessoa.cpf())) {
+    public synchronized Result insertPessoa(Pessoa dados) {
+        if (pessoas.containsKey(dados.cpf())) {
             return Result.err("Já existe uma pessoa com esse CPF");
         }
+        var pessoa = Pessoa.copy(dados);
         pessoas.put(pessoa.cpf(), pessoa);
         return Result.ok("Pessoa inserida com sucesso");
     }
@@ -32,11 +33,13 @@ public class Database {
         return Result.ok("Pessoa removida com sucesso");
     }
 
-    public synchronized Result updatePessoa(Pessoa pessoa) {
-        if (!pessoas.containsKey(pessoa.cpf())) {
+    public synchronized Result updatePessoa(Pessoa dados) {
+        if (!pessoas.containsKey(dados.cpf())) {
             return Result.err("Pessoa não encontrada");
         }
-        pessoas.put(pessoa.cpf(), pessoa);
+        var pessoa = pessoas.get(dados.cpf());
+        pessoa.setNome(dados.nome());
+        pessoa.setEndereco(dados.endereco());
         return Result.ok("Pessoa atualizada com sucesso");
     }
 
