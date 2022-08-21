@@ -20,7 +20,7 @@ public class Query {
         return this.entity;
     }
 
-    public String field(int idx) throws IndexOutOfBoundsException {
+    public String field(int idx) throws FieldOutOfBoundsException {
         return this.fields[idx];
     }
 

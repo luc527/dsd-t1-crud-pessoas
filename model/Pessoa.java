@@ -14,10 +14,6 @@ public class Pessoa implements Comparable<Pessoa> {
         this.endereco = endereco;
     }
 
-    public static Pessoa copy(Pessoa p) {
-        return new Pessoa(p.cpf, p.nome, p.endereco);
-    }
-
     public String cpf() { return this.cpf; }
     public String nome() { return this.nome; }
     public String endereco() { return this.endereco; }
