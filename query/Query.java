@@ -1,14 +1,16 @@
 package query;
 
+import query.entity.EntityTag;
+
 public class Query {
 
     private final Command cmd;
-    private final Entity entity;
+    private final EntityTag entityTag;
     private final String[] fields;
 
-    public Query(Command cmd, Entity entity, String[] fields) {
+    public Query(Command cmd, EntityTag entityTag, String[] fields) {
         this.cmd = cmd;
-        this.entity = entity;
+        this.entityTag = entityTag;
         this.fields = fields;
     }
 
@@ -16,8 +18,8 @@ public class Query {
         return this.cmd;
     }
 
-    public Entity entity() {
-        return this.entity;
+    public EntityTag entityTag() {
+        return this.entityTag;
     }
 
     public String field(int idx) throws FieldOutOfBoundsException {
@@ -25,6 +27,6 @@ public class Query {
     }
 
     public String toString() {
-        return String.format("%s %s %s", cmd, entity, String.join(";", fields));
+        return String.format("%s %s %s", cmd, entityTag, String.join(";", fields));
     }
 }

@@ -1,5 +1,7 @@
 package query;
 
+import query.entity.EntityTag;
+
 public class QueryParser {
 
     public static Query parse(String query) throws ParseException {
@@ -13,7 +15,7 @@ public class QueryParser {
         var cmd = Command
             .from(toks[0].toUpperCase())
             .orElseThrow(() -> new ParseException("Invalid command", query));
-        var entity = Entity
+        var entity = EntityTag
             .from(toks[1].toUpperCase())
             .orElseThrow(() -> new ParseException("Invalid entity", query));
         var fields = new String[toks.length-2];

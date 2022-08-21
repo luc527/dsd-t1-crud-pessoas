@@ -4,81 +4,39 @@ import db.Database;
 import db.Result;
 import dto.DisciplinaDados;
 import dto.PessoaDados;
+import query.entity.DisciplinaEntity;
+import query.entity.Entity;
+import query.entity.EntityTag;
+import query.entity.PessoaEntity;
+
+import java.util.EnumMap;
 
 public class QueryExecutor {
 
-    private final Database db;
+    private final EnumMap<EntityTag, Entity> entities;
 
     public QueryExecutor(Database db) {
-        this.db = db;
+        entities = new EnumMap<>(EntityTag.class);
+        entities.put(EntityTag.PESSOA, new PessoaEntity(db));
+        entities.put(EntityTag.DISCIPLINA, new DisciplinaEntity(db));
     }
 
     public Result execute(Query qry) {
         try {
-            switch (qry.entity()) {
-                case PESSOA: return pessoaExecute(qry);
-                case DISCIPLINA: return disciplinaExecute(qry);
-                case ALUNO: return alunoExecute(qry);
+            var entity = entities.get(qry.entityTag());
+            switch (qry.command()) {
+                case INSERT: return entity.insert(qry);
+                case UPDATE: return entity.update(qry);
+                case DELETE: return entity.delete(qry);
+                case GET: return entity.get(qry);
+                case LIST: return entity.list();
+                case EXISTS: return entity.exists(qry);
             }
         } catch (FieldOutOfBoundsException e) {
             return Result.err("Too few arguments");
+        } catch (UnsupportedClassVersionError e) {
+            return Result.err(e.getMessage());
         }
         throw new RuntimeException("unreachable");
-    }
-
-    private Result pessoaExecute(Query qry) {
-        switch (qry.command()) {
-            case INSERT: {
-                var dados = new PessoaDados(qry.field(0), qry.field(1), qry.field(2));
-                return db.insertPessoa(dados);
-            }
-            case UPDATE: {
-                var dados = new PessoaDados(qry.field(0), qry.field(1), qry.field(2));
-                return db.updatePessoa(dados);
-            }
-            case DELETE: {
-                return db.deletePessoa(qry.field(0));
-            }
-            case GET: {
-                return db.getPessoa(qry.field(0));
-            }
-            case LIST: {
-                return db.listPessoas();
-            }
-            case EXISTS: {
-                return Result.err("EXISTS unsupported for PESSOA");
-            }
-        }
-        throw new RuntimeException("unreachable");
-    }
-
-    private Result disciplinaExecute(Query qry) {
-        switch (qry.command()) {
-            case INSERT: {
-                var dados = new DisciplinaDados(qry.field(0), qry.field(1));
-                return db.insertDisciplina(dados);
-            }
-            case UPDATE: {
-                var dados = new DisciplinaDados(qry.field(0), qry.field(1));
-                return db.updateDisciplina(dados);
-            }
-            case DELETE: {
-                return db.deleteDisciplina(qry.field(0));
-            }
-            case GET: {
-                return db.getDisciplina(qry.field(0));
-            }
-            case LIST: {
-                return db.listDisciplinas();
-            }
-            case EXISTS: {
-                return Result.err("EXISTS unsupported for DISCIPLINA");
-            }
-        }
-        throw new RuntimeException("unreachable");
-    }
-
-    private Result alunoExecute(Query qry) {
-        return Result.err("unimplemented");
     }
 }
