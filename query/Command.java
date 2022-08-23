@@ -8,7 +8,8 @@ public enum Command {
     DELETE,
     GET,
     LIST,
-    EXISTS;
+    EXISTS,
+    LOADSCRIPT;
 
     public static Optional<Command> from(String cmd) {
         switch (cmd) {
@@ -18,6 +19,7 @@ public enum Command {
             case "GET": return Optional.of(GET);
             case "LIST": return Optional.of(LIST);
             case "EXISTS": return Optional.of(EXISTS);
+            case "LOADSCRIPT": return Optional.of(LOADSCRIPT);
             default: return Optional.empty();
         }
     }

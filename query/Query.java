@@ -18,6 +18,10 @@ public class Query {
         return this.cmd;
     }
 
+    public boolean hasEntityTag() {
+        return this.entityTag != null;
+    }
+
     public EntityTag entityTag() {
         return this.entityTag;
     }

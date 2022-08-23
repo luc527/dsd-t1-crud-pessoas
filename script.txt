@@ -1,0 +1,21 @@
+insert;pessoa;1;joao;rua a
+insert;pessoa;2;maria;rua b
+insert;pessoa;3;jose;rua c
+
+insert;pessoa;9;fernando;udesc
+
+insert;disciplina;65dsd;9
+
+insert;aluno;1;65dsd
+insert;aluno;2;65dsd
+insert;aluno;3;65dsd
+
+delete;aluno;3;65dsd
+
+#get;disciplina;65dsd
+
+update;aluno;1;65dsd;7.5
+update;aluno;2;65dsd;8.5
+update;aluno;3;65dsd;5
+
+#get;disciplina;65dsd

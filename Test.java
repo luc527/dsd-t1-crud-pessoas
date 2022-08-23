@@ -17,8 +17,8 @@ public class Test {
 
         while (true) {
             System.out.print("> ");
-            var str = in.next().toUpperCase();
-            if (str.equals("QUIT")) {
+            var str = in.next();
+            if (str.equals("quit")) {
                 break;
             }
 

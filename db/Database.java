@@ -1,5 +1,6 @@
 package db;
 
+import dto.AlunoDados;
 import dto.DisciplinaDados;
 import dto.PessoaDados;
 import model.Disciplina;
@@ -141,11 +142,86 @@ public class Database {
         }
         var disc = disciplinas.get(codigo);
         var prof = disc.professor();
-        var data = String.format("%s;%s;%s;%s", codigo, prof.cpf(), prof.nome(), prof.endereco());
 
-        // TODO alunos!!
+        var alunos = disc.alunos();
+        var medias = disc.mediasFinais();
+
+        var data = new String[1 + 1 + alunos.size()];
+
+        var i = 0;
+        data[i++] = String.format("%s;%s;%s;%s",
+            codigo, prof.cpf(), prof.nome(), prof.endereco()
+        );
+        data[i++] = "" + alunos.size();
+
+        for (var aluno : disc.alunos()) {
+            var mediaStr = "--";
+            if (medias.containsKey(aluno)) {
+                mediaStr = String.format("%02.2f", medias.get(aluno));
+            }
+            data[i++] = String.format("%s;%s;%s;%s",
+                aluno.cpf(), aluno.nome(), aluno.endereco(), mediaStr
+            );
+        }
 
         return Result.data(data);
     }
 
+    public synchronized Result insertAluno(AlunoDados dados) {
+        var disciplina = disciplinas.get(dados.codigoDisciplina);
+        if (disciplina == null) {
+            return Result.err("Não existe disciplina com esse código");
+        }
+        var aluno = pessoas.get(dados.cpfAluno);
+        if (aluno == null) {
+            return Result.err("Não existe pessoa como esse CPF pra ser aluno");
+        }
+        if (disciplina.alunos().contains(aluno)) {
+            return Result.ok("O aluno já pertence à disciplina");
+        }
+        disciplina.alunos().add(aluno);
+        return Result.ok("Aluno inserido com sucesso");
+    }
+
+    public synchronized Result updateAluno(AlunoDados dados) {
+        var disciplina = disciplinas.get(dados.codigoDisciplina);
+        if (disciplina == null) {
+            return Result.err("Não existe disciplina com esse código");
+        }
+        var aluno = pessoas.get(dados.cpfAluno);
+        if (!disciplina.alunos().contains(aluno)) {
+            return Result.err("Esse aluno não pertence à disciplina");
+        }
+        disciplina.mediasFinais().put(aluno, dados.mediaFinal);
+        return Result.ok("Aluno atualizado com sucesso");
+    }
+
+    public synchronized Result deleteAluno(AlunoDados dados) {
+        var disciplina = disciplinas.get(dados.codigoDisciplina);
+        if (disciplina == null) {
+            return Result.err("Não existe disciplina com esse código");
+        }
+        var aluno = pessoas.get(dados.cpfAluno);
+        if (disciplina.alunos().remove(aluno)) {
+            return Result.ok("Aluno removido com sucesso");
+        } else {
+            return Result.ok("O aluno já não pertence à disciplina");
+        }
+    }
+
+    public synchronized Result existsAluno(AlunoDados dados) {
+        var disciplina = disciplinas.get(dados.codigoDisciplina);
+        if (disciplina == null) {
+            return Result.err("Aluno não existe (disciplina não encontrada)");
+        }
+        var aluno = pessoas.get(dados.cpfAluno);
+        if (aluno == null) {
+            return Result.err("Aluno não existe (pessoa não encontrada)");
+        }
+        if (disciplina.alunos().contains(aluno)) {
+            return Result.ok("Aluno existe");
+        } else {
+            return Result.ok("Aluno não existe");
+        }
+    }
 }

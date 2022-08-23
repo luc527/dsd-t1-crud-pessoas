@@ -15,6 +15,9 @@ public class QueryParser {
         var cmd = Command
             .from(toks[0].toUpperCase())
             .orElseThrow(() -> new ParseException("Invalid command", query));
+        if (cmd.equals(Command.LOADSCRIPT)) {
+            return new Query(cmd, null, new String[]{toks[1]});
+        }
         var entity = EntityTag
             .from(toks[1].toUpperCase())
             .orElseThrow(() -> new ParseException("Invalid entity", query));
