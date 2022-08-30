@@ -8,11 +8,11 @@ public enum EntityTag {
     ALUNO;
 
     public static Optional<EntityTag> from(String entity) {
-        switch (entity) {
-            case "PESSOA": return Optional.of(PESSOA);
-            case "DISCIPLINA": return Optional.of(DISCIPLINA);
-            case "ALUNO": return Optional.of(ALUNO);
-            default: return Optional.empty();
-        }
+        return switch (entity) {
+            case "PESSOA" -> Optional.of(PESSOA);
+            case "DISCIPLINA" -> Optional.of(DISCIPLINA);
+            case "ALUNO" -> Optional.of(ALUNO);
+            default -> Optional.empty();
+        };
     }
 }

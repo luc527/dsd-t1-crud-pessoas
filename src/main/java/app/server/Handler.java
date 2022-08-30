@@ -2,7 +2,6 @@ package app.server;
 
 import app.db.Database;
 import app.db.Result;
-import app.query.ParseException;
 import app.query.Query;
 import app.query.QueryExecutor;
 import app.query.QueryParser;
@@ -27,13 +26,18 @@ public class Handler extends Thread {
             PrintWriter out = new PrintWriter(connection.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         ) {
-            String command = in.readLine();
-            QueryExecutor exec = new QueryExecutor(Database.getInstance());
-            Query query = QueryParser.parse(command);
-            Result result = exec.execute(query);
-            out.println(result);
-            connection.close();
-        } catch (IOException | ParseException e) {
+            try {
+                String command = in.readLine();
+                QueryExecutor exec = new QueryExecutor(Database.getInstance());
+                Query query = QueryParser.parse(command);
+                Result result = exec.execute(query);
+                out.println(result);
+            } catch (Exception e) {
+                out.println(e.getMessage());
+            } finally {
+                connection.close();
+            }
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
