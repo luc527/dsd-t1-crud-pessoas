@@ -186,6 +186,9 @@ public class Database {
         if (aluno == null) {
             return Result.err("Não existe pessoa como esse CPF pra ser aluno");
         }
+        if (disciplina.professor().cpf().equals(aluno.cpf())) {
+            return Result.err("A pessoa já é professor da disciplina, não pode ser aluno também");
+        }
         if (disciplina.alunos().contains(aluno)) {
             return Result.ok("O aluno já pertence à disciplina");
         }
