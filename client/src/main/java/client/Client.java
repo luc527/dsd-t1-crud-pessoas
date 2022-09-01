@@ -1,13 +1,13 @@
-package app.client;
-
-import app.server.Server;
+package client;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+        parseArguments(args);
+
         Scanner scanner = new Scanner(System.in);
         scanner.useDelimiter("\n");
         System.out.println("Type \"quit\" to exit application.");
@@ -32,7 +32,7 @@ public class Client {
     }
 
     public static void request(String command) {
-        try (Socket connection = new Socket("127.0.0.1", Server.PORT)) {
+        try (Socket connection = new Socket(Arguments.I().getServerHost(), Arguments.I().getServerPort())) {
             try (
                 PrintWriter out = new PrintWriter(connection.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -63,6 +63,17 @@ public class Client {
         } catch (IOException e) {
             System.out.println("Error while opening script file: " + filename);
         }
+    }
+
+    public static void parseArguments(String[] args) throws Exception {
+        if (args.length != 2) {
+            throw new Exception("Invalid arguments");
+        }
+
+        String host = args[0];
+        int port = Integer.parseInt(args[1]);
+
+        Arguments.I().setServerHost(host).setServerPort(port);
     }
 
 }
