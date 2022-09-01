@@ -25,36 +25,6 @@ public class QueryExecutor {
     public Result execute(Query qry) {
         try {
 
-            var cmd = qry.command();
-
-            if (cmd.equals(Command.LOADSCRIPT)) {
-                var script = qry.field(0);
-                try (var in = new BufferedReader(new FileReader(script))) {
-                    var messages = new ArrayList<String>();
-                    String qryStr;
-                    while ((qryStr = in.readLine()) != null) {
-                        qryStr = qryStr.trim();
-
-                        if (qryStr.length() == 0) continue;
-                        if (qryStr.charAt(0) == '#') continue;
-
-                        var parsedQry = QueryParser.parse(qryStr);
-                        if (parsedQry.command().equals(Command.LOADSCRIPT)) {
-                            return Result.err("Recursive LOADSCRIPT forbidden!");
-                        }
-                        var result = execute(parsedQry);
-                        messages.add(parsedQry + " : " + result.message());
-                    }
-                    return Result.data(messages.toArray(new String[0]));
-                } catch (FileNotFoundException e) {
-                    return Result.err("Arquivo de script não existe");
-                } catch (IOException e) {
-                    return Result.err("Erro ao abrir o arquivo de script");
-                } catch (ParseException e) {
-                    return Result.err("Erro ao ler query de script ("+e.getQueryString()+")");
-                }
-            }
-
             var entity = entities.get(qry.entityTag());
             switch (qry.command()) {
                 case INSERT: return entity.insert(qry);

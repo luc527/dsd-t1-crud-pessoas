@@ -2,9 +2,7 @@ package app.client;
 
 import app.server.Server;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -18,7 +16,18 @@ public class Client {
             System.out.print("> ");
             String command = scanner.next();
             if (command.equals("quit")) break;
-            request(command);
+
+            String[] commandTokens = command.split(";");
+            if (commandTokens.length > 1 && commandTokens[0].equals("loadscript")) {
+                if (commandTokens.length == 2) {
+                    requestCommandsFromFile(commandTokens[1]);
+                } else {
+                    System.out.println("loadscript command requires one and only one extra token: the path of the script file to load and run");
+                }
+            }
+            else {
+                request(command);
+            }
         }
     }
 
@@ -38,6 +47,21 @@ public class Client {
             }
         } catch (Exception e) {
             System.out.println("Error while connection to host: " + e.getMessage());
+        }
+    }
+
+    public static void requestCommandsFromFile(String filename) {
+        try (var in = new BufferedReader(new FileReader(filename))) {
+            for (String line; (line = in.readLine()) != null;) {
+                if (line.isBlank()) continue;
+                if (line.charAt(0) == '#') continue;
+                System.out.println("~> Executando " + line);
+                request(line);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Script file does not exist");
+        } catch (IOException e) {
+            System.out.println("Error while opening script file: " + filename);
         }
     }
 
