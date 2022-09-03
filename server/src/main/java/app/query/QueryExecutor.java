@@ -4,11 +4,6 @@ import app.db.Database;
 import app.db.Result;
 import app.query.entity.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.EnumMap;
 
 public class QueryExecutor {
